@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004_modify_table_users
+      author: ramil
+      changes:
+        - addColumn:
+            tableName: users_table
+            columns:
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_table_role_id
+                    references: roles(id)

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/001_create_tables.yaml
+  - include:
+      file: db/migration/002_authorities.yaml
+  - include:
+      file: db/migration/003_roles.yaml
+  - include:
+      file: db/migration/004_alter_user.yaml
+  - include:
+      file: db/migration/005_insert_auth_data.yaml
+  - include:
+      file: db/migration/insert_data.sql
