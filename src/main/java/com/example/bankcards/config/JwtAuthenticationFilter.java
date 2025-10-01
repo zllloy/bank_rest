@@ -56,12 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json; charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("""
-                {
-                  "status": 401,
-                  "error": "Unauthorized",
-                  "message": "JWT токен просрочен. Пожалуйста, войдите заново."
-                }
-            """);
+                        {
+                          "status": 401,
+                          "error": "Unauthorized",
+                          "message": "JWT токен просрочен. Пожалуйста, войдите заново."
+                        }
+                    """);
             return;
         } catch (io.jsonwebtoken.JwtException ex) {
             log.warn("Некорректный JWT токен: {}", ex.getMessage());
@@ -69,12 +69,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json; charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("""
-                {
-                  "status": 401,
-                  "error": "Unauthorized",
-                  "message": "Некорректный JWT токен."
-                }
-            """);
+                        {
+                          "status": 401,
+                          "error": "Unauthorized",
+                          "message": "Некорректный JWT токен."
+                        }
+                    """);
             return;
         }
 
@@ -95,12 +95,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
                     response.getWriter().write("""
-                        {
-                          "status": 401,
-                          "error": "Unauthorized",
-                          "message": "JWT токен недействителен."
-                        }
-                    """);
+                                {
+                                  "status": 401,
+                                  "error": "Unauthorized",
+                                  "message": "JWT токен недействителен."
+                                }
+                            """);
                     return;
                 }
             }

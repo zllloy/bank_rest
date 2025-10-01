@@ -181,7 +181,7 @@ public class CardServiceImpl implements CardService {
             throw new AccessDeniedException("Вы не можете перевести деньги с чужой карты");
         }
 
-        if(!toCard.getOwner().getId().equals(user.getId())) {
+        if (!toCard.getOwner().getId().equals(user.getId())) {
             throw new AccessDeniedException("Вы не можете делать переводы на чужие карты");
         }
 

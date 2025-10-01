@@ -40,9 +40,7 @@ public class CardsController {
 
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> updateCardStatus(
-            @PathVariable Long id,
-            @RequestBody @Valid CardStatusUpdateRequestDto request) {
+    public ResponseEntity<Void> updateCardStatus(@PathVariable Long id, @RequestBody @Valid CardStatusUpdateRequestDto request) {
         cardsService.updateStatus(id, CardStatus.valueOf(request.getStatus().toUpperCase()));
         return ResponseEntity.noContent().build();
     }
@@ -56,13 +54,7 @@ public class CardsController {
 
     @GetMapping("/user/{userId}/cards")
     @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #userId == principal.id)")
-    public ResponseEntity<Page<CardDto>> getUserCards(
-            @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) CardStatus status
-    ) {
+    public ResponseEntity<Page<CardDto>> getUserCards(@PathVariable Long userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String search, @RequestParam(required = false) CardStatus status) {
         Pageable pageable = PageRequest.of(page, size);
         Page<CardDto> cards = cardsService.getUserCards(userId, pageable, search, status);
         return ResponseEntity.ok(cards);
@@ -70,21 +62,14 @@ public class CardsController {
 
     @GetMapping("/my-cards")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Page<CardDto>> getMyCards(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) CardStatus status
-    ) {
+    public ResponseEntity<Page<CardDto>> getMyCards(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String search, @RequestParam(required = false) CardStatus status) {
         Long currentUserId = usersService.getCurrentUser().getId();
         return getUserCards(currentUserId, page, size, search, status);
     }
 
 
     @GetMapping("/balance")
-    public BigDecimal getBalance(
-            @Valid @RequestBody GetBalanceCard id
-    ) throws AccessDeniedException {
+    public BigDecimal getBalance(@Valid @RequestBody GetBalanceCard id) throws AccessDeniedException {
         return cardsService.getBalance(id);
     }
 

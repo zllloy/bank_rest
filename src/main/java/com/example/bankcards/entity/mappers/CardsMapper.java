@@ -30,7 +30,7 @@ public class CardsMapper {
         return dtos;
     }
 
-    public RequestBlockCardDto toDtoRequestBlockCard (RequestToBlockCards requestsToBlockCards) {
+    public RequestBlockCardDto toDtoRequestBlockCard(RequestToBlockCards requestsToBlockCards) {
         RequestBlockCardDto dto = new RequestBlockCardDto();
         dto.setId(requestsToBlockCards.getId());
         dto.setBalance(requestsToBlockCards.getCard().getBalance());
@@ -40,7 +40,7 @@ public class CardsMapper {
         return dto;
     }
 
-    public List<RequestBlockCardDto> toDtoRequestBlockCard (List<RequestToBlockCards> requestsToBlockCards) {
+    public List<RequestBlockCardDto> toDtoRequestBlockCard(List<RequestToBlockCards> requestsToBlockCards) {
         List<RequestBlockCardDto> dtos = new ArrayList<>();
         for (RequestToBlockCards requestToBlockCards : requestsToBlockCards) {
             dtos.add(toDtoRequestBlockCard(requestToBlockCards));

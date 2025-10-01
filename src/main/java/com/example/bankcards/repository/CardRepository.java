@@ -12,8 +12,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     Optional<Card> findByEncryptedCardNumber(String encryptedNumber);
 
-    boolean existsByEncryptedCardNumber(String encryptedNumber);
-
     Page<Card> findByOwner_Id(Long ownerId, Pageable pageable);
 
     Page<Card> findByOwner_IdAndStatus(Long ownerId, CardStatus status, Pageable pageable);
