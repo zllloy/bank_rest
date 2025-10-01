@@ -10,7 +10,7 @@
 
 ### 1. Клонирование репозитория
 ```bash
-git clone https://github.com/username/bankcards.git
+git clone https://github.com/zllloy/bank_rest.git
 cd bankcards
 ```
 ### 2. Сборка и запуск
