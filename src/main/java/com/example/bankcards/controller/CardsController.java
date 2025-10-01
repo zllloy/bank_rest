@@ -2,8 +2,8 @@ package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.*;
 import com.example.bankcards.entity.enums.CardStatus;
-import com.example.bankcards.service.impl.CardServiceImpl;
-import com.example.bankcards.service.impl.UserServiceImpl;
+import com.example.bankcards.service.CardService;
+import com.example.bankcards.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cards")
 public class CardsController {
-    private final CardServiceImpl cardsService;
-    private final UserServiceImpl usersService;
+    private final CardService cardsService;
+    private final UserService usersService;
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -36,12 +36,6 @@ public class CardsController {
     public ResponseEntity<CardDto> createCard(@Valid @RequestBody CardCreateRequestDto request) throws AccessDeniedException {
         cardsService.createCard(request);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CardDto> getCard(@PathVariable("id") Long id) {
-        CardDto card = cardsService.getCardById(id);
-        return ResponseEntity.ok(card);
     }
 
     @PatchMapping("/{id}/status")

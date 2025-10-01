@@ -3,8 +3,10 @@ package com.example.bankcards.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class GetBalanceCard {
     @NotNull(message = "Id карты обязательно должен быть указан.")
     @Min(value = 1, message = "Id карты не может быть меньше 1.")

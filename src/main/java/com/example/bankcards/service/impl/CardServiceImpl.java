@@ -31,6 +31,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class CardServiceImpl implements CardService {
@@ -98,16 +99,6 @@ public class CardServiceImpl implements CardService {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found with id: " + cardId));
         cardRepository.delete(card);
-    }
-
-    @Override
-    public CardDto getCardById(Long id) {
-        Card card = cardRepository.findById(id)
-                .orElseThrow(() -> new CardNotFoundException("Card not found"));
-
-        card.decryptCardNumber(encryptionService);
-
-        return CardDto.fromEntity(card, masker);
     }
 
     @Override

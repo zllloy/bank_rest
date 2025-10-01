@@ -18,8 +18,6 @@ public interface CardService {
 
     void createCard(CardCreateRequestDto request) throws AccessDeniedException;
 
-    CardDto getCardById(Long id);
-
     Page<CardDto> getUserCards(Long userId, Pageable pageable, String search, CardStatus status);
 
     Card getCardByNumber(String cardNumber);
