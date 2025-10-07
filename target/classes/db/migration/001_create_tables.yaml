@@ -1,0 +1,103 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: ramil
+      changes:
+        - createTable:
+            tableName: users_table
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(45)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-cards-table
+      author: ramil
+      changes:
+        - createTable:
+            tableName: cards_table
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: number
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: users_table(id)
+                    foreignKeyName: fk_card_user_id
+              - column:
+                  name: validity_period
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    check: "status IN ('ACTIVE', 'BLOCKED', 'EXPIRED')"
+              - column:
+                  name: balance
+                  type: numeric
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create-table-of-requests-to-block-card
+      author: ramil
+      changes:
+        - createTable:
+            tableName: requests_to_block_card_table
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: owner
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: users_table(id)
+                    foreignKeyName: fk_request_block_card_user_id
+              - column:
+                  name: card
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: cards_table(id)
+                    foreignKeyName: fk_request_block_card_id
+

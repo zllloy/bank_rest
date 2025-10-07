@@ -1,0 +1,3 @@
+com\example\bankcards\controller\CardsControllerTest.class
+com\example\bankcards\config\TestConfig.class
+com\example\bankcards\service\impl\CardServiceImplTest.class

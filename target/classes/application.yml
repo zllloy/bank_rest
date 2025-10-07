@@ -1,0 +1,51 @@
+bank:
+  encryption:
+    secret-key: "my-super-secret-key-32-chars-long!"
+    salt: "my-unique-salt-value"
+
+spring:
+  application:
+    name: bank_rest
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bank_rest
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        generate_statistics: false
+        format_sql: true
+        show_sql: false
+
+  liquibase:
+    change-log: classpath:/db/migration/master.yaml
+
+
+logging:
+  level:
+    root: info
+    org:
+      hibernate:
+        type: error
+        stat: error
+      springframework:
+        security: debug
+        web: info
+        sql: error
+  file:
+    path: logs
+
+
+server:
+  port: 8080
+
+#Jwt token
+token:
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+
+
