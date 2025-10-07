@@ -24,6 +24,9 @@ public class JwtService {
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
+    @Value("${token.expiration-ms}")
+    private long jwtExpirationMs;
+
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -47,13 +50,13 @@ public class JwtService {
         return claimsResolvers.apply(claims);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-
+ private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 24))
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -1,8 +1,11 @@
 package com.example.bankcards.config;
 
 import com.example.bankcards.entity.User;
+import com.example.bankcards.exception.ErrorResponse;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.security.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,35 +49,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = null;
-
+        String username;
         try {
             username = jwtService.extractUserName(token);
         } catch (io.jsonwebtoken.ExpiredJwtException ex) {
             log.warn("JWT просрочен: {}", ex.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json; charset=UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("""
-                        {
-                          "status": 401,
-                          "error": "Unauthorized",
-                          "message": "JWT токен просрочен. Пожалуйста, войдите заново."
-                        }
-                    """);
+            sendError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                      "Unauthorized", "JWT токен просрочен. Пожалуйста, войдите заново.");
             return;
         } catch (io.jsonwebtoken.JwtException ex) {
             log.warn("Некорректный JWT токен: {}", ex.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json; charset=UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("""
-                        {
-                          "status": 401,
-                          "error": "Unauthorized",
-                          "message": "Некорректный JWT токен."
-                        }
-                    """);
+            sendError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                      "Unauthorized", "Некорректный JWT токен.");
             return;
         }
 
@@ -92,15 +78,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 } catch (io.jsonwebtoken.JwtException ex) {
                     log.warn("Ошибка валидации токена: {}", ex.getMessage());
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.setContentType("application/json");
-                    response.getWriter().write("""
-                                {
-                                  "status": 401,
-                                  "error": "Unauthorized",
-                                  "message": "JWT токен недействителен."
-                                }
-                            """);
+                    sendError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                              "Unauthorized", "JWT токен недействителен.");
                     return;
                 }
             }
@@ -108,5 +87,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-}
 
+    private void sendError(HttpServletResponse response, int status, String error, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        ErrorResponse errorResponse = new ErrorResponse(status, error, message);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
+    }
+}

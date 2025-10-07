@@ -1,7 +1,9 @@
 package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.UserDto;
+import com.example.bankcards.dto.UserResponseDto;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.mappers.UserMapper;
 import com.example.bankcards.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,14 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserServiceImpl userService;
+    private final UserMapper userMapper;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) {
-        User created = userService.createUser(user);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserDto user) {
+        UserDto created = userService.createUser(user);
+
+        return ResponseEntity.ok(userMapper.userResponseToDto(created));
     }
 
     @PatchMapping("/{id}/block")

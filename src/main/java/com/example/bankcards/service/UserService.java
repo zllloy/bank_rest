@@ -11,9 +11,9 @@ public interface UserService {
 
     User getCurrentUser();
 
-    User createUser(UserDto userDto);
+    UserDto createUser(UserDto userDto);
 
-    User save(User user);
+    User save(UserDto user);
 
     User blockUser(Long id);
 

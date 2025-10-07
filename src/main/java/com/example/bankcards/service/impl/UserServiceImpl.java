@@ -3,7 +3,9 @@ package com.example.bankcards.service.impl;
 import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.Role;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.mappers.UserMapper;
 import com.example.bankcards.exception.RoleNotFoundException;
+import com.example.bankcards.exception.UserAlreadyExistsException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.RoleRepository;
 import com.example.bankcards.repository.UserRepository;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,12 +42,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         if (userRepository.existsByUsername(userDto.getUsername())) {
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
         }
+
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new RuntimeException("Пользователь с таким email уже существует");
+            throw new UserAlreadyExistsException("Пользователь с таким email уже существует");
         }
 
         Role userRole = roleRepository.findByRoleName("USER")
@@ -58,13 +62,15 @@ public class UserServiceImpl implements UserService {
                 .enabled(true)
                 .build();
 
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+     
+        return userMapper.toDto(newUser);
     }
 
     @Override
     @Transactional
-    public User save(User user) {
-        return userRepository.save(user);
+    public User save(UserDto user) {
+        return userRepository.save(userMapper.backToUser(user));
     }
 
     @Override

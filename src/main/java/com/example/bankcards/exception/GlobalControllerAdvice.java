@@ -38,6 +38,16 @@ public class GlobalControllerAdvice {
         return new ResponseEntity<>(errorService.makeResponse(ex), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), 
+                "Bad Request",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseBody> handleUserNotFound(UserNotFoundException ex) {
         return new ResponseEntity<>(errorService.makeResponse(ex), HttpStatus.NOT_FOUND);

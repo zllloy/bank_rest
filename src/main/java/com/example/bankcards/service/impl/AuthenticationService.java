@@ -27,7 +27,7 @@ public class AuthenticationService {
 
     public JwtAuthenticationResponseDto signUp(SignUpRequestDto request) throws RoleNotFoundException {
 
-        User user = userService.createUser(
+        User user = userService.save(
                 new UserDto(
                         request.getUsername(),
                         request.getEmail(),
